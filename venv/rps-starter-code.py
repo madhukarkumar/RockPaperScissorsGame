@@ -36,7 +36,6 @@ class Player:
     def get_score(self):
         return self.score
 
-
 class RandomPlayer(Player):
     def move(self):
         return random.choice(['rock', 'paper', 'scissors'])
@@ -104,7 +103,7 @@ class Game:
         print(f"{self.p1.get_name()}'s move: {move1} "
               f" {self.p2.get_name()}'s move: {move2}")
         if self.is_a_tie(move1, move2):
-            print('The round was a tie')
+            print('\033[96m The round was a tie \033[00m')
         else:
             if self.beats(move1, move2):  # If true then move 1 won)
                 print(f"{self.p1.get_name()} won")
@@ -118,16 +117,17 @@ class Game:
         # set player 2 score to +1
 
     def play_game(self):
+        print("Game will  have total of",rounds, "rounds, first one to reach the best out of",rounds," score wins!")
         print("Game start!")
-        for r in range(3):
+        for r in range(rounds):
             print("\033[93m {}\033[00m".format(f"Round {r + 1}:"))
             self.play_round()
         p1_final_score = self.p1.get_score()
         p2_final_score = self.p2.get_score()
-        print(f"{self.p1.get_name()} final score = {p1_final_score}")
-        print(f"{self.p2.get_name()} final score = {p2_final_score}")
+        print("\033[92m {}\033[00m".format(f"{self.p1.get_name()} final score = {p1_final_score}"))
+        print("\033[92m {}\033[00m".format(f"{self.p2.get_name()} final score = {p2_final_score}"))
         if p1_final_score == p2_final_score:
-            print("The Game was a tie !!")
+            print("\033[95m The Game was a tie !! \033[00m ")
         else:
             if p1_final_score > p2_final_score:
                 print("\033[95m {}\033[00m".
@@ -143,19 +143,21 @@ if __name__ == '__main__':
                               format(f"Welcome to Rock, "
                                      f"Paper and Scissors. "
                                      f"What's your name: "))
+    cycle_player_name = input("\033[91m {}\033[00m".format(f"Enter computer's name: "))
+    rounds=int(input("\033[91m Enter the number of total rounds to be played: \033[00m"))
     # Play first with CyclePlayer
-    game = Game(CyclePlayer("Cycle Player"), HumanPlayer(human_player_name))
+    game = Game(CyclePlayer(cycle_player_name), HumanPlayer(human_player_name))
     game.play_game()
     while True:
         user_choice = input("Do you want to play again? "
-                            "Type Yes or No")
+                            "Type Yes or No ")
         if user_choice.lower() in ['yes', 'no']:
-            if user_choice.lower == 'yes':
-                game2 = Game(RandomPlayer("Random Player"),
+            if user_choice.lower() == 'yes':  #Here in the user_choice.lower, () was missing from the syntax thus leading to an error when prompted the yes at the end of the game.
+                game2 = Game(RandomPlayer(cycle_player_name),
                              HumanPlayer(human_player_name))
                 game2.play_game()
             else:
-                print("Goodbye")
+                print("\033[96m Goodbye \033[00m")
                 break
         else:
             print("\033[92m {}\033[00m".format(f"*** Sorry, "
